@@ -2,9 +2,11 @@ import Decimal from 'decimal.js'
 import { AnyAction } from 'redux'
 import { NA_STRING } from '../../../constants/static'
 import {
+  clearMessageAction,
   estimateGasAction,
   getBalancesAction,
   loginAction,
+  messageAction,
 } from '../../actions/wallet/walletActions'
 import { WalletState } from './types'
 
@@ -22,6 +24,8 @@ const initialState: Partial<WalletState> = {
     gasPriceUsd: new Decimal(0),
     gasPriceWei: '0',
   },
+  message: '',
+  id: -1,
 }
 
 const wallet = (
@@ -50,6 +54,15 @@ const wallet = (
         ...state,
         fee: action.payload,
       }
+    case messageAction.type:
+      return {
+        ...state,
+        message: action.payload.params.message,
+        id: action.payload.id,
+        client: action.payload.client,
+      }
+    case clearMessageAction.type:
+      return { ...state, message: initialState.message }
     default: {
       return state
     }

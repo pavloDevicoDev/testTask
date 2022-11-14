@@ -43,14 +43,12 @@ function ImportWalletPage() {
 const Wrapper = styled.View`
   width: 100%;
   height: 100%;
-  display: flex;
   background-color: ${({ theme }) => theme.colors.mineShaft};
 `
 
 const StyledIconButton = styled(IconButton)`
   width: 44px;
   height: 44px;
-  display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
@@ -58,7 +56,6 @@ const StyledIconButton = styled(IconButton)`
 `
 
 const InfoBlock = styled.View`
-  display: flex;
   background-color: ${({ theme }) => theme.colors.mineShaft};
   flex: 1;
   width: 100%;
@@ -68,13 +65,11 @@ const InfoBlock = styled.View`
 `
 
 const UpPart = styled.View`
-  display: flex;
   width: 100%;
   align-items: center;
 `
 
 const DownPart = styled.View`
-  display: flex;
   width: 100%;
   align-items: center;
 `

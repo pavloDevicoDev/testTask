@@ -43,7 +43,6 @@ const StyledBody = styled(Body)`
 
 const WordBlock = styled(Animated.View)`
   height: 40px;
-  display: flex;
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -55,7 +54,6 @@ const WordBlock = styled(Animated.View)`
 `
 
 const Container = styled.View`
-  display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;

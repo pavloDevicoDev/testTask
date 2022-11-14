@@ -1,18 +1,27 @@
 import Decimal from 'decimal.js'
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, fork, put, take, takeEvery } from 'redux-saga/effects'
+import { eventChannel, EventChannel } from 'redux-saga'
 import { TransactionType } from '../../../components/TransictionItem'
 
 import {
+  clearMessageAction,
   estimateGasAction,
   getBalancesAction,
+  messageAction,
+  signAction,
+  walletConnectPairAction,
 } from '../../actions/wallet/walletActions'
 import * as api from './api'
+import store from '../../configureStore'
 
 export type AsyncAction<T, F> = {
   payload: T
   type: string
   next: (err?: string | null, data?: F) => void
 }
+type Address = string
+
+const authClientsMap: Record<Address, Awaited<api.ConnectClient>> = {}
 
 export function* getBalances(
   action: AsyncAction<
@@ -30,6 +39,12 @@ export function* getBalances(
       api.getTransactionsList,
       address
     )
+    if (!authClientsMap[address]) {
+      authClientsMap[address] = yield call(api.initAuthClient, address)
+      authClientsMap[address].on('auth_request', ({ id, params }) => {
+        store.dispatch(messageAction({ id, params }))
+      })
+    }
 
     yield put(
       getBalancesAction.success({
@@ -84,7 +99,47 @@ export function* estimateGas(
   }
 }
 
+export function* pairWalletConnect(
+  action: AsyncAction<
+    { uri: string; address: string },
+    { eth: string; usd: string; transactions: TransactionType[] }
+  >
+) {
+  try {
+    yield put(walletConnectPairAction.success(false))
+
+    const { uri, address } = action.payload
+
+    yield call(api.pair, authClientsMap[address], uri)
+
+    yield put(walletConnectPairAction.success(true))
+  } catch (err) {
+    console.error(err)
+    yield put(walletConnectPairAction.failed())
+  }
+}
+
+export function* signWalletConnect(
+  action: AsyncAction<
+    { id: number; signature: string; address: string },
+    { eth: string; usd: string; transactions: TransactionType[] }
+  >
+) {
+  try {
+    yield put(walletConnectPairAction.success(false))
+
+    const { id, signature, address } = action.payload
+
+    yield call(api.respond, authClientsMap[address], id, signature)
+    yield put(clearMessageAction())
+  } catch (err) {
+    yield put(signAction.failed())
+  }
+}
+
 export default function* () {
   yield takeEvery(getBalancesAction.request.type, getBalances)
   yield takeEvery(estimateGasAction.request.type, estimateGas)
+  yield takeEvery(signAction.request.type, signWalletConnect)
+  yield takeEvery(walletConnectPairAction.request.type, pairWalletConnect)
 }

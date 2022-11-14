@@ -1,5 +1,7 @@
-import { MORALIS_API_KEY } from '../../../config/config'
+import { AuthClient } from '@walletconnect/auth-client'
+import { MORALIS_API_KEY, WALLET_CONNECT_ID } from '../../../config/config'
 import { web3 } from '../../../utils/web3'
+import Pino from 'pino'
 
 export type MoralisTransaction = {
   value: string
@@ -40,3 +42,36 @@ export const getTransactionsList = async (address: string) => {
 
   return transactionsResult.result as MoralisTransaction[]
 }
+
+export type ConnectClient = Awaited<ReturnType<typeof AuthClient['init']>>
+
+export const initAuthClient = (address: string) =>
+  AuthClient.init({
+    projectId: WALLET_CONNECT_ID,
+    iss: `did:pkh:eip155:1:${address}`,
+    metadata: {
+      name: 'XDEFI Wallet',
+      description: 'ETH Wallet',
+      url: 'https://www.xdefi.io/',
+      icons: [
+        'https://www.xdefi.io/wp-content/themes/xdefi/assets/dist/images/logos/site-logo-icon.svg',
+      ],
+    },
+    logger: Pino(),
+  })
+
+export const pair = async (client: ConnectClient, uri: string) =>
+  await client.core.pairing.pair({ uri })
+
+export const respond = async (
+  client: ConnectClient,
+  id: number,
+  signature: string
+) =>
+  await client.respond({
+    id: id,
+    signature: {
+      s: signature,
+      t: 'eip191',
+    },
+  })

@@ -76,19 +76,16 @@ export const TransactionItem = memo(
 )
 
 const Row = styled.View`
-  display: flex;
   flex-direction: row;
   align-items: center;
 `
 
 const InfoBlock = styled.View`
-  display: flex;
   justify-content: space-between;
   width: auto;
 `
 
 const Container = styled(Animated.View)`
-  display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

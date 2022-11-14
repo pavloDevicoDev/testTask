@@ -29,7 +29,6 @@ export const Button = memo<ButtonProps & LayoutItemProps>(
 
 export const Centered = styled.View`
   margin-right: 10px;
-  display: flex;
   align-items: center;
   justify-content: center;
 `
@@ -41,7 +40,6 @@ const ButtonTitle = styled(Body)`
 `
 
 const Wrapper = styled(TouchableOpacity)`
-  display: flex;
   border-radius: 8px;
   height: 48px;
   flex-direction: row;

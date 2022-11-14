@@ -1,73 +1,77 @@
+import React from 'react'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { memo, useCallback, useState } from 'react'
 import styled from 'styled-components/native'
 import { Header } from '../../components/Header'
 import { TitleSmall } from '../../components/typography/TitleSmall'
 import { IconButton } from '../../components/buttons/IconButton'
+import ModalComponent from '../../components/ModalComponent'
 import BackIcon from '../../assets/icons/BackIcon'
 import { Button } from '../../components/buttons/Button'
 import BarCodeScanner from '../../components/BarCodeScanner'
-import ROUTES from '../../routes/RouteNames'
-import { RotationBox } from '../../components/RotationBox'
 import { BarCodeType } from '../../types/types'
-import { loginAction } from '../../state/actions/wallet/walletActions'
-import { fromMnemonic } from '../../utils/fromMnemonic'
-import { ACCOUNT_INDEX } from '../../config/config'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { LoaderBox } from '../../components/LoaderBox'
-import { SecretPhrase } from '../../components/SecretPhrase'
+import { State } from '../../state/reducers/types'
+import { clearMessageAction, signAction, walletConnectPairAction } from '../../state/actions/wallet/walletActions'
+import ROUTES from '../../routes/RouteNames'
 
-function ImportQRCode() {
+function ConnectQRCode() {
   const { goBack, navigate } = useNavigation<NavigationProp<any>>()
   const [barCodeValue, setBarCodeValue] = useState<BarCodeType>({
     phrases: [],
     rawValue: '',
   })
+  const { address, message, id, account } = useSelector((state: State) => state.wallet)
   const [scanned, setScanned] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const dispatch = useDispatch()
 
   const onBack = useCallback(() => {
     goBack()
   }, [goBack])
 
-  const handleClickNext = useCallback(() => {
-    setIsLoading(true)
-    setTimeout(() => {
-      dispatch(loginAction(fromMnemonic(barCodeValue.rawValue, ACCOUNT_INDEX)))
-      setIsLoading(false)
+  const handleBarCodeValueChange = (barCode: BarCodeType) => {
+    setBarCodeValue(barCode)
+    const walletConnectUri = barCode.rawValue
+    if (walletConnectUri.startsWith('wc:')) {
+      dispatch(walletConnectPairAction.request({ uri: walletConnectUri, address }))
+    }
+  }
+
+  const handleClose = () => {
+    dispatch(clearMessageAction())
+  }
+
+  const handleAccept = async () => {
+    if (message) {
+      const signature = await account.signMessage(message)
+      dispatch(signAction.request({ id, signature, address }))
       navigate(ROUTES.MainPage)
-    }, 0)
-  }, [barCodeValue.rawValue])
+    }
+  }
 
   return (
     <Wrapper>
       <Header LeftPart={<StyledIconButton icon={BackIcon} onPress={onBack} />}>
-        <TitleSmall>Import from QR code</TitleSmall>
+        <TitleSmall>Connect with WalletConnect</TitleSmall>
       </Header>
       <InfoBlock>
         <UpPart>
           <BarCodeScanner
             barCodeValue={barCodeValue}
-            setBarCodeValue={setBarCodeValue}
+            setBarCodeValue={handleBarCodeValueChange}
             scanned={scanned}
             setScanned={setScanned}
-          >
-            <SecretPhrase data={barCodeValue} />
-          </BarCodeScanner>
+          />
         </UpPart>
         <DownPart>
-          <RotationBox disabled={!!barCodeValue.error || !scanned}>
-            <StyledLoaderBox isLoading={isLoading}>
-              <StyledButton
-                onPress={handleClickNext}
-                title="Next"
-                disabled={!!barCodeValue.error || !scanned}
-              />
-            </StyledLoaderBox>
-          </RotationBox>
+          <StyledButton
+            onPress={onBack}
+            title="Back"
+          />
         </DownPart>
       </InfoBlock>
+      <ModalComponent questionText={message} isModalOpen={!!message} onClose={handleClose} onAccept={handleAccept} />
     </Wrapper>
   )
 }
@@ -113,4 +117,5 @@ const StyledLoaderBox = styled(LoaderBox)`
   margin-bottom: 16px;
 `
 
-export default memo(ImportQRCode)
+
+export default memo(ConnectQRCode)

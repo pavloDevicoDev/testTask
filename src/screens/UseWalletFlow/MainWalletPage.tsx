@@ -28,7 +28,7 @@ function MainWalletPage() {
     navigate(ROUTES.CreateTransactionPage)
   }, [])
 
-  const handleClickConnect = useCallback(() => {}, [])
+  const handleClickConnect = useCallback(() => { navigate(ROUTES.ConnectQRCode) }, [])
 
   useEffect(() => {
     const timerId = setInterval(async () => {
@@ -60,8 +60,8 @@ function MainWalletPage() {
             onPress={handleClickCreateTransaction}
             title="Create transaction"
           />
-          <RotationBox disabled>
-            <Button onPress={handleClickConnect} title="Connect" disabled />
+          <RotationBox>
+            <Button onPress={handleClickConnect} title="Connect" />
           </RotationBox>
         </StyledButtonBlock>
         <ListWrapper>
@@ -81,7 +81,6 @@ function MainWalletPage() {
 
 const Wrapper = styled.View`
   flex: 1;
-  display: flex;
   background-color: ${({ theme }) => theme.colors.mineShaft};
   align-items: center;
   justify-content: space-between;
@@ -90,7 +89,6 @@ const Wrapper = styled.View`
 const ListWrapper = styled.View`
   flex: 1;
   width: 100%;
-  display: flex;
 `
 
 const StyledButtonBlock = styled.View`
@@ -103,7 +101,6 @@ const StyledButton = styled(Button)`
 `
 
 const UpPart = styled.View`
-  display: flex;
   width: 100%;
   align-items: center;
   padding: 16px;
@@ -111,7 +108,6 @@ const UpPart = styled.View`
 `
 
 const DownPart = styled.View`
-  display: flex;
   width: 100%;
   align-items: center;
   flex: 1.5;
@@ -119,7 +115,6 @@ const DownPart = styled.View`
 
 const StyledTitle = styled(Title)`
   padding: 24px;
-  display: flex;
   background-color: ${({ theme }) => theme.colors.charcoal};
 `
 

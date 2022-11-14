@@ -30,7 +30,6 @@ const StyledView = styled.View`
 `
 
 const Container = styled.View`
-  display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

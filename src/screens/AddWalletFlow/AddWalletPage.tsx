@@ -71,7 +71,6 @@ function AddWalletPage() {
 }
 
 const Wrapper = styled.View`
-  display: flex;
   flex: 1;
   background-color: ${({ theme }) => theme.colors.black};
 `
@@ -81,25 +80,21 @@ const StyledLogo = styled.View`
 `
 
 const Row = styled.View`
-  display: flex;
   flex-direction: row;
   margin-bottom: 16px;
 `
 
 const UpPart = styled.View`
-  display: flex;
   width: 100%;
   align-items: center;
 `
 
 const DownPart = styled.View`
-  display: flex;
   width: 100%;
   align-items: center;
 `
 
 const InfoBlock = styled(Animated.View)`
-  display: flex;
   background-color: ${({ theme }) => theme.colors.mineShaft};
   width: 100%;
   border-radius: 8px;

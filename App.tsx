@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import "@walletconnect/react-native-compat"
 import { Provider } from 'react-redux'
 import Navigator from './src/routes/Navigator'
 import store from './src/state/configureStore'

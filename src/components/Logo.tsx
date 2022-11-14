@@ -11,7 +11,6 @@ const Logo = () => {
 }
 
 const Wrapper = styled.View`
-  display: flex;
   justify-content: space-between;
   align-items: space-between;
   margin: auto;

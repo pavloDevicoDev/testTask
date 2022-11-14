@@ -12,6 +12,7 @@ import ImportSeedPhrase from '../screens/AddWalletFlow/ImportSeedPhrase'
 import ImportQRCode from '../screens/AddWalletFlow/ImportQRCode'
 import MainWalletPage from '../screens/UseWalletFlow/MainWalletPage'
 import CreateTransactionPage from '../screens/UseWalletFlow/CreateTransactionPage'
+import ConnectQRCode from '../screens/Connect/ConnectQRCode'
 
 const Stack = createStackNavigator()
 
@@ -59,6 +60,11 @@ const Navigator = () => {
           <Stack.Screen
             component={CreateTransactionPage}
             name={ROUTES.CreateTransactionPage}
+            options={options}
+          />
+          <Stack.Screen
+            component={ConnectQRCode}
+            name={ROUTES.ConnectQRCode}
             options={options}
           />
         </Stack.Navigator>

@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js'
 import { TransactionType } from '../../../components/TransictionItem'
 import { EthersWallet } from '../../../utils/fromMnemonic'
+import { ConnectClient } from '../../sagas/wallet/api'
 
 export type WalletState = {
   mnemonic: string
@@ -17,4 +18,7 @@ export type WalletState = {
     gasAmount: number
     fee: string
   }
+  message: string
+  id: number
+  client: ConnectClient
 }

@@ -163,14 +163,12 @@ function CreateTransactionPage() {
 const Wrapper = styled.View`
   width: 100%;
   height: 100%;
-  display: flex;
   background-color: ${({ theme }) => theme.colors.mineShaft};
 `
 
 const StyledIconButton = styled(IconButton)`
   width: 44px;
   height: 44px;
-  display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
@@ -181,7 +179,6 @@ const StyledButton = styled(Button)`
 `
 
 const InfoBlock = styled.View`
-  display: flex;
   flex: 1;
   width: 100%;
   border-radius: 8px;
@@ -190,7 +187,6 @@ const InfoBlock = styled.View`
 `
 
 const UpPart = styled.View`
-  display: flex;
   align-items: center;
   background-color: ${({ theme }) => theme.colors.mineShaft};
   padding: 4px 16px;
@@ -199,14 +195,12 @@ const UpPart = styled.View`
 `
 
 const DownPart = styled.View`
-  display: flex;
   width: 100%;
   align-items: center;
   padding: 0 16px;
 `
 
 const NetworkFeeBlock = styled.View<{ width?: number }>`
-  display: flex;
   flex-direction: row;
   width: ${({ width }) => (width ? `${width}px` : '100%')};
   align-items: center;
@@ -216,13 +210,9 @@ const NetworkFeeBlock = styled.View<{ width?: number }>`
   margin-bottom: 16px;
 `
 
-const FeeTitle = styled(TitleSmall)`
-  display: flex;
-`
+const FeeTitle = styled(TitleSmall)``
 
-const FeePrice = styled(TitleSmall)`
-  display: flex;
-`
+const FeePrice = styled(TitleSmall)``
 
 const BottomLine = styled.View<{ width?: number }>`
   border: 1px dashed ${({ theme }) => theme.colors.black};

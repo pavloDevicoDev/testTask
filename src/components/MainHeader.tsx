@@ -46,7 +46,6 @@ const StyledBody = styled(Body)`
 
 const Container = styled.View`
   width: 60%;
-  display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px;
@@ -57,6 +56,5 @@ const Container = styled.View`
 `
 
 const Row = styled.View`
-  display: flex;
   flex-direction: row;
 `

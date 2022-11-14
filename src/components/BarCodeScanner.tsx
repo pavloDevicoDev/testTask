@@ -15,19 +15,19 @@ type Props = {
   setBarCodeValue: (prop: BarCodeType) => void
   setScanned: (prop: boolean) => void
   onChangeProps?: (prop: BarCodeType) => void
-}
+} & React.PropsWithChildren
 
 export default function BarCodeScanner({
-  barCodeValue,
   setBarCodeValue,
   setScanned,
   scanned,
   onChangeProps,
+  children
 }: Props) {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null)
 
   const askForCameraPermission = useCallback(() => {
-    ;(async () => {
+    ; (async () => {
       const { status } = await QRScanner.requestPermissionsAsync()
       setHasPermission(status === 'granted')
     })()
@@ -79,7 +79,7 @@ export default function BarCodeScanner({
           disabled={!scanned}
         />
       </RotationBox>
-      <SecretPhrase data={barCodeValue} />
+      {children}
     </Wrapper>
   )
 }
@@ -87,7 +87,6 @@ export default function BarCodeScanner({
 const Wrapper = styled.View`
   width: 100%;
   height: 500px;
-  display: flex;
   align-items: center;
   background-color: ${({ theme }) => theme.colors.mineShaft};
 `
